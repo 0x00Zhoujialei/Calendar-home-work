@@ -1,9 +1,13 @@
 import { Component } from 'react'
 import { View } from '@tarojs/components'
-import { AtCalendar } from 'taro-ui'
+import Calendar from "custom-calendar-taro";
+import { compareAsc, format } from 'date-fns'
 import './index.less'
 
 export default class Index extends Component {
+  state = {
+    current: Date.now()
+  }
 
   componentWillMount () { }
 
@@ -15,11 +19,16 @@ export default class Index extends Component {
 
   componentDidHide () { }
 
+  handleMonthChange = (v) => {
+    console.log(v)
+  }
+
   render () {
     return (
       <View className='index'>
-        <AtCalendar
+        <Calendar
           isMultiSelect
+          onMonthChange={this.handleMonthChange}
         />
       </View>
     )

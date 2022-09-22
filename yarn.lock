@@ -4317,6 +4317,11 @@ currently-unhandled@^0.4.1:
   dependencies:
     array-find-index "^1.0.1"
 
+custom-calendar-taro@^1.0.12:
+  version "1.0.12"
+  resolved "https://registry.yarnpkg.com/custom-calendar-taro/-/custom-calendar-taro-1.0.12.tgz#187297e9a187bbece654b1a237ccbd1d8bd4ecb6"
+  integrity sha512-ziSXbyoaESx/+u8Pb3S/3YEIJeRz6rxSWW16WZxOX5mBY/oXlUZtEZ6DTt+n6iqwn9AjfmtodCzbt6602J4X6Q==
+
 dashdash@^1.12.0:
   version "1.14.1"
   resolved "https://registry.yarnpkg.com/dashdash/-/dashdash-1.14.1.tgz#853cfa0f7cbe2fed5de20326b8dd581035f6e2f0"
@@ -4332,6 +4337,11 @@ data-urls@^1.1.0:
     abab "^2.0.0"
     whatwg-mimetype "^2.2.0"
     whatwg-url "^7.0.0"
+
+date-fns@^2.29.3:
+  version "2.29.3"
+  resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-2.29.3.tgz#27402d2fc67eb442b511b70bbdf98e6411cd68a8"
+  integrity sha512-dDCnyH2WnnKusqvZZ6+jA1O51Ibt8ZMRNkDZdyAyK4YfbDwa/cEmuztzG5pk6hqlp9aSBPYcjOlktquahGwGeA==
 
 dayjs@^1.7.7:
   version "1.11.5"
