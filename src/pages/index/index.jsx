@@ -1,7 +1,7 @@
-import { Component } from 'react'
-import { Button, View } from '@tarojs/components'
+import {Component} from 'react'
+import {Button, View} from '@tarojs/components'
 import Calendar from "nick-custom-calendar-taro";
-import { AtToast } from 'taro-ui'
+import {AtToast} from 'taro-ui'
 import {
   isMonday,
   isWednesday,
@@ -21,30 +21,36 @@ export default class Index extends Component {
 
   state = {
     marks: [
-      { value: '2022-09-24', color: 'red', markSize: '9px' },
-      { value: '2021-06-12', color: 'pink', markSize: '9px' },
-      { value: '2021-06-13', color: 'gray', markSize: '9px' },
-      { value: '2021-06-14', color: 'yellow', markSize: '9px' },
-      { value: '2021-06-15', color: 'darkblue', markSize: '9px' },
-      { value: '2021-06-16', color: 'pink', markSize: '9px' },
-      { value: '2021-06-17', color: 'green', markSize: '9px' },
+      {value: '2022-09-24', color: 'red', markSize: '9px'},
+      {value: '2021-06-12', color: 'pink', markSize: '9px'},
+      {value: '2021-06-13', color: 'gray', markSize: '9px'},
+      {value: '2021-06-14', color: 'yellow', markSize: '9px'},
+      {value: '2021-06-15', color: 'darkblue', markSize: '9px'},
+      {value: '2021-06-16', color: 'pink', markSize: '9px'},
+      {value: '2021-06-17', color: 'green', markSize: '9px'},
     ],
     isOpened: false,
-    text: ''
+    text: '',
+    currentSelect: {
+      start: '',
+      end: ''
+    }
   }
 
-  componentWillMount () {
+  componentWillMount() {
   }
 
-  componentDidMount () {
+  componentDidMount() {
   }
 
-  componentWillUnmount () { }
-
-  componentDidShow () {
+  componentWillUnmount() {
   }
 
-  componentDidHide () { }
+  componentDidShow() {
+  }
+
+  componentDidHide() {
+  }
 
   isDateValid = (date) => {
     return isMonday(date) || isWednesday(date) || isFriday(date)
@@ -74,8 +80,7 @@ export default class Index extends Component {
         right: "-0.8rem",
         top: "0",
       },
-      dateStyle: {
-      },
+      dateStyle: {},
       markStyle: {
         top: "auto",
         bottom: "0",
@@ -117,40 +122,77 @@ export default class Index extends Component {
     this.currentDateInfo = []
   }
 
-  handleSelectDate = (v) => {
-    console.log(this.calendarRef.state.selectedRange)
+  handleDayClick = (v) => {
     this.setState({
       isOpened: false,
       text: ''
     })
-    const start = this.calendarRef.state.selectedRange.start
-    const startDate = new Date(start)
-    const end = this.calendarRef.state.selectedRange.end
-    console.log(start, end)
-    if (end !== "" && start !== "" && start !== end) {
-      const endDate = new Date(end)
-      let current = startDate
-      let t = ""
-      while (!isAfter(current, endDate)) {
-        t += `${format(current,'yyyy年MM月dd日')},`
-        console.log(t)
-        current = addDays(current, 1)
-      }
-      t = t.slice(0, -1)
+    const start = this.state.currentSelect.start
+    // if start is empty string, it is when user tap the begin of the selected range, we do nothing
+    if (start === "") {
       this.setState({
-        isOpened: true,
-        text: t
+        currentSelect: {
+          start: v.value,
+          end: ''
+        }
       })
-      setTimeout(() => {
-        this.setState({
-          isOpened: false,
-          text: ""
-        })
-      }, 3000)
+      return
     }
+
+    const end = this.state.currentSelect.end
+    // if end is not empty string ,it is the beginning of the next selected range, we do nothing
+    if (end !== "") {
+      this.setState({
+        currentSelect: {
+          start: v.value,
+          end: ''
+        }
+      })
+      return
+    }
+
+    const startDate = new Date(start)
+    let current, endDate
+    if (startDate > new Date(v.value)) {
+      current = new Date(v.value)
+      endDate = startDate
+      this.setState({
+        currentSelect: {
+          start: v.value,
+          end: this.state.currentSelect.start
+        }
+      })
+    } else {
+      current = startDate
+      endDate = new Date(v.value)
+      this.setState({
+        currentSelect: {
+          start: this.state.currentSelect.start,
+          end: v.value
+        }
+      })
+    }
+    // console.log(v, current, endDate)
+    let t = ""
+    while (!isAfter(current, endDate)) {
+      t += `${format(current, 'yyyy年MM月dd日')},`
+      console.log(t)
+      current = addDays(current, 1)
+    }
+    t = t.slice(0, -1)
+    this.setState({
+      isOpened: true,
+      text: t,
+    })
+    setTimeout(() => {
+      this.setState({
+        isOpened: false,
+        text: ""
+      })
+    }, 2000)
   }
 
-  render () {
+  render() {
     return (
       <View className='index'>
         <Calendar
@@ -164,7 +206,7 @@ export default class Index extends Component {
           customStyleGenerator={this.handleCustomStyleGenerator}
           onMonthChange={this.handleMonthChange}
           canSelectDay={this.handleCanSelectDay}
-          onSelectDate={this.handleSelectDate}
+          onDayClick={this.handleDayClick}
           bindRef={(ref) => {
             this.calendarRef = ref
           }}
